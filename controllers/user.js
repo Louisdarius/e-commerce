@@ -1,8 +1,10 @@
 const User = require('../models/user');
 
 const register = async (req, res, next) => {
+  console.log(req.isDeviceApproved);
   try {
-    const { firstName, lastName, email, password, isAdmin } = req.body;
+    const { firstName, lastName, email, password, isAdmin, isDeviceApproved } =
+      req.body;
 
     //Check if a user with the same email exists
     const existEmail = await User.findOne({ email });
@@ -10,8 +12,10 @@ const register = async (req, res, next) => {
       res.status(401);
       throw new Error(`${email} already exists. Try a different email`);
     }
+
     const user = new User({ firstName, lastName, email, password, isAdmin });
-    if (isAdmin) {
+
+    if (isAdmin == 'true' && isDeviceApproved == 'false') {
       res.status(401);
       throw new Error('Cannot register as an admin');
     }
@@ -113,10 +117,25 @@ const deleteUser = async (req, res) => {
     next(e);
   }
 };
+
+const getAllUsers = async (req, res, next) => {
+  try {
+    const { user } = req;
+    if (!user.isAdmin) {
+      throw new Error('Admin priviledge required');
+    }
+    const allUsers = await User.find({});
+    res.json(allUsers);
+  } catch (e) {
+    next(e);
+  }
+};
+
 module.exports = {
   register,
   login,
   logout,
   updateUser,
   deleteUser,
+  getAllUsers,
 };
