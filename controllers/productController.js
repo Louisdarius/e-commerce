@@ -18,26 +18,24 @@ const addProduct = async (req, res, next) => {
       countInStock: countInStock,
     });
     await product.save();
-    res.json(product);
+    res.send(product);
   } catch (e) {
     next(e);
   }
 };
-
 const getAllProducts = async (req, res, next) => {
   try {
     const products = await Product.find({});
-    res.json(products);
+    res.send(products);
   } catch (e) {
     next(e);
   }
 };
-
 const getAProduct = async (req, res, next) => {
   try {
     const product = await Product.findById(req.params.id);
     if (product) {
-      res.json(product);
+      res.send(product);
     } else {
       res.status(404);
       throw new Error('Product not found');
@@ -46,7 +44,6 @@ const getAProduct = async (req, res, next) => {
     next(e);
   }
 };
-
 const updateAProduct = async (req, res, next) => {
   try {
     let {
@@ -97,7 +94,6 @@ const updateAProduct = async (req, res, next) => {
     next(e);
   }
 };
-
 const deleteAProduct = async (req, res, next) => {
   try {
     const product = await Product.findById(req.params.id);

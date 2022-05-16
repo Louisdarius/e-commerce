@@ -43,5 +43,12 @@ const productSchema = mongoose.Schema(
   }
 );
 
+productSchema.methods.toJSON = function () {
+  const product = this;
+  const productObject = product.toObject();
+  delete productObject.user;
+  return productObject;
+};
+
 const Product = mongoose.model('Product', productSchema);
 module.exports = Product;

@@ -1,6 +1,6 @@
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
-const User = require('../models/user');
+const User = require('../models/userModel');
 
 const admin = async (req, res, next) => {
   try {
@@ -8,7 +8,7 @@ const admin = async (req, res, next) => {
       next();
     } else {
       res.status(404);
-      throw new Error('Access denied. Admin access only');
+      throw new Error('Sorry this action is limited to Admin only');
     }
   } catch (e) {
     next(e);
